@@ -1,7 +1,6 @@
+from __future__ import print_function, division
 import platform
 platform.python_version()
-
-from __future__ import print_function, division
 import sys
 import json
 import csv
@@ -21,7 +20,7 @@ except:
   sys.path.insert(0,deep_moji_path + '/deepmoji')
   print(os.listdir(deep_moji_path + '/deepmoji'))
   second_time_running = True
-  
+
 from deepmoji.sentence_tokenizer import SentenceTokenizer
 from deepmoji.model_def import deepmoji_emojis
 from deepmoji.global_variables import PRETRAINED_PATH, VOCAB_PATH
