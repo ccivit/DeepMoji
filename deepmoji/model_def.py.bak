@@ -7,8 +7,8 @@ from tensorflow.keras.models import Model, Sequential
 from tensorflow.keras.layers import concatenate
 from tensorflow.keras.layers import Input, Bidirectional, Embedding, Dense, Dropout, SpatialDropout1D, LSTM, Activation
 from tensorflow.keras.regularizers import L1L2
-from .global_variables import NB_TOKENS, NB_EMOJI_CLASSES
-from .attlayer import AttentionWeightedAverage
+from deepmoji.global_variables import NB_TOKENS, NB_EMOJI_CLASSES
+from deepmoji.attlayer import AttentionWeightedAverage
 import numpy as np
 from copy import deepcopy
 from os.path import exists

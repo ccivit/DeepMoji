@@ -23,9 +23,9 @@ from deepmoji.global_variables import (
     FINETUNING_METHODS,
     FINETUNING_METRICS,
     WEIGHTS_DIR)
-from .tokenizer import tokenize
-from .sentence_tokenizer import SentenceTokenizer
-from .attlayer import AttentionWeightedAverage
+from deepmoji.tokenizer import tokenize
+from deepmoji.sentence_tokenizer import SentenceTokenizer
+from deepmoji.attlayer import AttentionWeightedAverage
 
 
 def load_benchmark(path, vocab, extend_with=0):
@@ -55,8 +55,8 @@ def load_benchmark(path, vocab, extend_with=0):
             maxlen: Maximum length of an input.
     """
     # Pre-processing dataset
-    with open(path,'rb') as dataset:
-        data = pickle.load(dataset,encoding='utf-8')
+    with open(path) as dataset:
+        data = pickle.load(dataset)
 
     # Decode data
     try:
@@ -169,7 +169,7 @@ def change_trainable(layer, trainable, verbose=False):
 
     if verbose:
         action = 'Unfroze' if trainable else 'Froze'
-        print(("{} {}".format(action, layer.name)))
+        print("{} {}".format(action, layer.name))
 
 
 def find_f1_threshold(y_val, y_pred_val, y_test, y_pred_test,
@@ -334,11 +334,11 @@ def finetune(model, texts, labels, nb_classes, batch_size, method,
     if error_checking:
         for ls in [y_train, y_val, y_test]:
             if not ls.ndim == 1:
-                print(('WARNING (finetune): The dimension of the '
+                print('WARNING (finetune): The dimension of the '
                       'provided label list does not match the expected '
                       'value. When using the \'{}\' metric, the labels '
                       'should be a 1-dimensional array. '
-                      'Input shape was {}'.format(metric, ls.shape)))
+                      'Input shape was {}'.format(metric, ls.shape))
                 break
 
     if method in ['last', 'new']:
@@ -360,9 +360,9 @@ def finetune(model, texts, labels, nb_classes, batch_size, method,
 
     # Training
     if verbose:
-        print(('Method:  {}'.format(method)))
-        print(('Metric:  {}'.format(metric)))
-        print(('Classes: {}'.format(nb_classes)))
+        print('Method:  {}'.format(method))
+        print('Metric:  {}'.format(metric))
+        print('Classes: {}'.format(nb_classes))
 
     if method == 'chain-thaw':
         result = chain_thaw(model, nb_classes=nb_classes,
@@ -422,7 +422,7 @@ def tune_trainable(model, nb_classes, train, val, test, epoch_size,
         y_test = to_categorical(y_test)
 
     if verbose:
-        print(("Trainable weights: {}".format(model.trainable_weights)))
+        print("Trainable weights: {}".format(model.trainable_weights))
         print("Training..")
 
     # Use sample generator for fixed-size epoch
@@ -441,7 +441,7 @@ def tune_trainable(model, nb_classes, train, val, test, epoch_size,
     sleep(1)
     model.load_weights(checkpoint_weight_path, by_name=False)
     if verbose >= 2:
-        print(("Loaded weights from {}".format(checkpoint_weight_path)))
+        print("Loaded weights from {}".format(checkpoint_weight_path))
 
     if evaluate == 'acc':
         return evaluate_using_acc(model, X_test, y_test, batch_size=batch_size)
@@ -617,7 +617,7 @@ def train_by_chain_thaw(model, train_gen, val_data, loss, callbacks, epoch_size,
             if layer is None:
                 print('Finetuning all layers')
             else:
-                print(('Finetuning {}'.format(layer.name)))
+                print('Finetuning {}'.format(layer.name))
 
         steps = int(epoch_size / batch_size)
         model.fit_generator(train_gen, steps_per_epoch=steps,
@@ -629,4 +629,4 @@ def train_by_chain_thaw(model, train_gen, val_data, loss, callbacks, epoch_size,
         sleep(1)
         model.load_weights(checkpoint_weight_path, by_name=False)
         if verbose >= 2:
-            print(("Loaded weights from {}".format(checkpoint_weight_path)))
+            print("Loaded weights from {}".format(checkpoint_weight_path))
